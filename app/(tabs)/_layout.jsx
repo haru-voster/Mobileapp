@@ -32,7 +32,6 @@ export default function TabLayout(){
                 <FontAwesome name="user" size={size} color="blue" />
             )
         }}/>
-
       </Tabs>
     )
 }
