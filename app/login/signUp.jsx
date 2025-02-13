@@ -1,27 +1,36 @@
-import {View, Text, StyleSheet, Button, TouchableOpacity, ToastAndroid} from 'react-native'
+import {View, Text, StyleSheet, Button, TouchableOpacity, ToastAndroid, Alert} from 'react-native'
 import React, { useState } from 'react'
 import Colors from '../../constant/Colors'
 import { useRouter } from 'expo-router'
 import { TextInput } from 'react-native'
 import {auth} from './../../config/FirebaseConfig'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { setLocalStorage } from '../../service/Storage'
 
 export default function SignUp(){
 
 const router=useRouter();
 const [email, setEmail]=useState();
-const [password, passwords]=useState();
+const [password, setPassword]=useState();
+const [userName, setUserName] = useState();
+
 const onCreateAccount=()=>{
  
-if(!email||!password)
+if(!email||!password||!userName)
 {
     ToastAndroid.show('Please fill all fields ', ToastAndroid.BOTTOM)
+    Alert.alert('Please enter email/password')
+    return;
 }
 createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
+  .then(async(userCredential) => {
     // Signed up 
     const user = userCredential.user;
-    console.log(user);
+    await updateProfile(user,{
+        displayName:userName
+    })
+    await setLocalStorage('userDetail', user);
+    router.push('(tabs)')
     // ...
   })
   .catch((error) => {
@@ -31,7 +40,7 @@ createUserWithEmailAndPassword(auth, email, password)
     if(errorCode=='auth/email-already-in-use')
     {
         ToastAndroid.show('Email already exist', ToastAndroid.BOTTOM);
-
+        Alert.alert('Email already exists')
     }
     // ..
 
@@ -49,7 +58,9 @@ createUserWithEmailAndPassword(auth, email, password)
             marginTop:25
         }}>
             <Text >Full Name</Text>
-            <TextInput placeholder='Full name' style={styles.textInput}/>
+            <TextInput placeholder='Full name' 
+            onChangeText={(value)=> setUserName(value)}
+            style={styles.textInput}/>
         </View>
         <View style={{
             marginTop:25
@@ -76,6 +87,7 @@ createUserWithEmailAndPassword(auth, email, password)
             <TextInput placeholder='Enter Password'
             secureTextEntry={true}
              style={styles.textInput}
+             onChangeText={(value)=>setPassword(value)}
              />
 
         </View>

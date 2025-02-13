@@ -13,14 +13,14 @@ export default function LoginScreen() {
         alignItems:'center',
         marginTop:40
        }}>
-        {/* <Image source={require('../../assets/images/download.png')}
+        <Image source={require('../../assets/images/favicon.png')}
         style={{
             width:210,
             height:450,
             borderRadius:23
             
         }}
-        /> */}
+        />
        </View>
       <View style={{
         padding:25,
@@ -63,7 +63,7 @@ export default function LoginScreen() {
     </View>
   )
 }
-// const styles = styleSheet.create({
+// const styles = StyleSheet.create({
 //   image:{
 //     width:210
 //   },
