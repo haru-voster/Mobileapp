@@ -16,15 +16,25 @@ export default function Header(){
     }
 
     return(
-        <View>
-        <View>
+        <View style={{
+           marginTop:20
+        }}>
+        <View style={{
+             alignItems:'center',
+             gap:10,
+             display:'flex',
+             flexDirection:'row'
+        }}>
             <Image source={require('./../assets/images/smiley.png')}
             style={{
                 width:45,
                 height:45
             }}
             />
-        <Text>Hello {user?.displayName}</Text>
+        <Text style={{
+            fontSize:25,
+            fontWeight:'bold'
+        }}>Hello {user?.displayName}👋</Text>
         </View>
         </View>
     )
