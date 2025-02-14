@@ -7,3 +7,11 @@ export const FormatDate=(timestamp)=>{
 export const formatDateForText=(date)=>{
     return moment(date).format('ll')
 }
+
+export const formatTime = (timestamp) => {
+    const date = new Date(timestamp);
+    const timeString = date.toISOString().substr(11, 5); // 'HH:MM'
+    console.log(timeString);
+    return timeString;
+  };
+  
