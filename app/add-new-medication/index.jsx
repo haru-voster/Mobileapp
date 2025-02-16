@@ -8,7 +8,7 @@ export default function AddNewMedication(){
        <ScrollView>
         <AddMedicationHeader/>
               
-         <AddMedicationForm/>        
+        <AddMedicationForm />      
        </ScrollView> 
    )
 }
