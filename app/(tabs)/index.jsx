@@ -6,6 +6,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../config/FirebaseConfig";
 import Header from "../../components/Header";
 import EmptyState from "../../components/EmptyState";
+import MedicationList from "../../components/MedicationList";
 
 export default function HomeScreen(){
     return (
@@ -16,7 +17,9 @@ export default function HomeScreen(){
             width:'100%'
         }}>
            <Header/>
-            <EmptyState/>
+           
+
+            <MedicationList/>
         </View>
     )
 }

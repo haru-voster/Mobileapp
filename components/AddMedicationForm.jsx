@@ -18,6 +18,7 @@ import {
   FormatDate,
   formatDateForText,
   formatTime,
+  getDateRange,
 } from "../service/ConvertDateTime";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../config/FirebaseConfig";
@@ -52,12 +53,16 @@ export default function AddNewMedication() {
         Alert.alert('Missing Information', 'Please enter all fields.');
         return;
     }
+
+    const dates=getDateRange(formData?.startDate.endDate);
+    console.log(dates);
     setLoading(true);
     try {
         const docRef = await setDoc(doc(db, "users", docId), {
             ...formData,
             userEmail: user?.email,
-            docId: docId
+            docId: docId,
+            dates:dates
         });
         console.log("Document written successfully");
         setLoading(false);
