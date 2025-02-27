@@ -23,7 +23,7 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../config/FirebaseConfig";
 import { Alert } from 'react-native';
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection, addDoc} from "firebase/firestore"; 
 import { useRouter } from "expo-router";
 
 

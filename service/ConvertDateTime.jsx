@@ -27,19 +27,16 @@ export const getDateRange=(startDate, endDate)=>{
     }
 return dates;
 }
-export const GetDateRangeToDisplay=()=>{
-      const dateList=[];
-      for(let i=0;i<=7;i++)
-      {
+export const GetDateRangeToDisplay = () => {
+    const dateList = [];
+    for (let i = 0; i <= 7; i++) {
         dateList.push({
-            date:moment().add(i, 'days').format('DD'),//24
-            day:moment().add(i, 'days').format('dd'),//Tu
+            date: moment().add(i, 'days').format('DD'), // 24
+            day: moment().add(i, 'days').format('dd'), // Tu
+            formattedDate: moment().add(i, 'days').format('L') // 12/24/2025
+        });
+    }
+    return dateList; // Moved outside the loop
+};
 
-            formattedDate:moment().add(i, 'days').format('L')//12/24/2025
 
-
-        })
-        return dateList;
-      }
-
-}

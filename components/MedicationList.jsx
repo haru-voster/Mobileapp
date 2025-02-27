@@ -3,23 +3,51 @@ import {View, Text, Image, FlatList, StyleSheet, TouchableOpacity} from 'react-n
 import { GetDateRangeToDisplay } from '../service/ConvertDateTime';
 import Colors  from '../constant/Colors';
 import moment from 'moment';
+import { getDocs } from 'firebase/firestore';
 
 
 export default function MedicationList() {
-    const [medList, setMediList] = useState();
+    const [medList, setMedList] = useState();
     const [dateRange, setDateRange]=useState();
     const [selectDate, setSelectDate]=useState(moment().format('MM/DD/YYYY'));
-
-    useEffect(()=>{
+    const [loading , setLoading] = useState(false);
+    useEffect(() => {
       GetDateRangeList();
-    },[])
+      console.log("Generated Date Range:", dateRange);
+    }, []);
+    useEffect(() => {
+      GetDateRangeList(selectDate);
+  }, []);
+  
+    
 
     const GetDateRangeList=()=>{
        const dateRange=GetDateRangeToDisplay();
      setDateRange(dateRange);
 
     }
+    const GetMedicationList=async(selectDate)=>{
+      setLoading(True);
+      const user=await getLocalStorage('userDetail');
+      setMedList([]);
+      try{
+        const q=query(collection(db,'medic'),
+        where('UserEmail','==',user?.email),
+        where("dates",'array-contains',selectDate));
 
+        const querySnapshot=await getDocs(q);
+    
+        querySnapshot.forEach((doc)=>{
+          console.log("docId:"+doc.id+'==>',doc.data())
+          setMedList(prev=>[...prev, doc.data() ] )
+        })
+        setLoading(False);
+      }catch(e)
+      {
+        console.log(e)
+      }
+
+    }
  return(
   <View style={{
     
@@ -31,21 +59,43 @@ export default function MedicationList() {
       borderRadius:15
     }}
     />
-    <FlatList
+        <FlatList
       data={dateRange}
+      keyExtractor={(item, index) => index.toString()}
       horizontal
-      style={{marginTop:15}}
+      style={{ marginTop: 15 }}
+      contentContainerStyle={{ flexDirection: 'row' }} // Ensure horizontal layout
       showsHorizontalScrollIndicator={false}
-      renderItem={({item,index})=>(
-        <TouchableOpacity style={[styles.dateGroup,{backgroundColor:item.formattedDate==selectDate?Colors.PRIMARY:Colors.LIGHT_GRAY_BORDER}]}
-        onPress={()=>setSelectDate(item.formattedDate)}
+      renderItem={({ item }) => (
+        <TouchableOpacity
+          style={[
+            styles.dateGroup,
+            { backgroundColor: item.formattedDate === selectDate ? Colors.PRIMARY : Colors.LIGHT_GRAY_BORDER }
+          ]}
+          onPress={() => {setSelectDate(item.formattedDate);
+           GetMedicationList(item.formattedDate)
+          }}
         >
-          <Text style={[styles.day, {color:item.formattedDate==selectDate?'white':'black'}]}>{item.day}</Text>
-          <Text style={[styles.date, {color:item.formattedDate==selectDate?'white':'black'}]}>{item.date}</Text>
+          <Text style={[styles.day, { color: item.formattedDate === selectDate ? 'white' : 'black' }]}>{item.day}</Text>
+          <Text style={[styles.date, { color: item.formattedDate === selectDate ? 'white' : 'black' }]}>{item.date}</Text>
         </TouchableOpacity>
       )}
-    
     />
+
+    {medList.length>0? <FlatList
+    
+      data={medList}
+      onRefresh={()=>GetDateRangeList(selectDate)}
+      refreshing={loading}
+      renderItem={({item, index})=>(
+        <TouchableOpacity >
+        <MedicationCartItem medicine={item}/>
+        </TouchableOpacity>
+
+      )}
+    
+    />:<EmptyState/>}
+
 
   </View>
  )
