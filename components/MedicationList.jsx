@@ -99,7 +99,7 @@ export default function MedicationList() {
           selectDate:selectDate
         }
       })}>
-        <MedicationCardItem medicine={item} />
+        <MedicationCardItem medicine={item} selectDate={selectDate} />
       </TouchableOpacity>
     )}
   />

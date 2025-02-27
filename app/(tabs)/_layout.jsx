@@ -38,11 +38,11 @@ export default function TabLayout(){
 
         }}
         />
-        <Tabs.Screen name ='AddNew'
+        <Tabs.Screen name ='History'
         options={{
-            tabBarLabel:"Add New",
+            tabBarLabel:"History",
             tabBarIcon:({color,size})=>(
-                <FontAwesome name="plus-square" size={size} color="blue" />
+                <FontAwesome name="history" size={size} color="blue" />
             )
         }}
         />
