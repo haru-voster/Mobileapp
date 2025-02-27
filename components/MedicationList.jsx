@@ -4,9 +4,11 @@ import { GetDateRangeToDisplay } from '../service/ConvertDateTime';
 import Colors  from '../constant/Colors';
 import moment from 'moment';
 import EmptyState from "../components/EmptyState";
-
-import { getDocs } from 'firebase/firestore';
 import { useRouter } from 'expo-router';
+import { collection, getDocs ,  query, where} from 'firebase/firestore';
+import { getLocalStorage } from '../service/Storage';
+import {db} from '../config/FirebaseConfig'
+
 
 
 export default function MedicationList() {
@@ -89,7 +91,7 @@ export default function MedicationList() {
 {medList?.length > 0 ? 
   <FlatList
     data={medList}
-    onRefresh={() => GetDateRangeList(selectDate)}
+    onRefresh={() => GetMedicationList(selectDate)}
     refreshing={loading}
     renderItem={({ item }) => (
       <TouchableOpacity onPress={()=>router.push({
@@ -127,6 +129,24 @@ const styles = StyleSheet.create({
 
     fontWeight:'bold',
     fontSize:26
-  }
-})
+  },
+    mainContainer:{
+      padding:25,
+      backgroundColor:"white"
+      
+  
+    },
+    imageBanner:{
+      width:'100%',
+      height:200,
+      borderRadius:15
+    },
+    header:{
+      fontSize:25,
+      fontWeight:'bold',
+      margin:20
+    }
+  })
+  
+
 
