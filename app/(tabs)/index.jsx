@@ -7,7 +7,7 @@ import { auth } from "../../config/FirebaseConfig";
 import Header from "../../components/Header";
 import EmptyState from "../../components/EmptyState";
 import MedicationList from "../../components/MedicationList";
-import { FlatList } from "react-native-web";
+import { FlatList } from "react-native";
 
 export default function HomeScreen(){
     return (

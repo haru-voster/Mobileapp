@@ -3,7 +3,10 @@ import {View, Text, Image, FlatList, StyleSheet, TouchableOpacity} from 'react-n
 import { GetDateRangeToDisplay } from '../service/ConvertDateTime';
 import Colors  from '../constant/Colors';
 import moment from 'moment';
+import EmptyState from "../components/EmptyState";
+
 import { getDocs } from 'firebase/firestore';
+import { useRouter } from 'expo-router';
 
 
 export default function MedicationList() {
@@ -11,6 +14,7 @@ export default function MedicationList() {
     const [dateRange, setDateRange]=useState();
     const [selectDate, setSelectDate]=useState(moment().format('MM/DD/YYYY'));
     const [loading , setLoading] = useState(false);
+    const router=useRouter();
     useEffect(() => {
       GetDateRangeList();
       console.log("Generated Date Range:", dateRange);
@@ -22,7 +26,7 @@ export default function MedicationList() {
     
 
     const GetDateRangeList=()=>{
-       const dateRange=GetDateRangeToDisplay();
+       const dateRange=GetDateRangeToDisplay();  
      setDateRange(dateRange);
 
     }
@@ -82,19 +86,25 @@ export default function MedicationList() {
       )}
     />
 
-    {medList.length>0? <FlatList
-    
-      data={medList}
-      onRefresh={()=>GetDateRangeList(selectDate)}
-      refreshing={loading}
-      renderItem={({item, index})=>(
-        <TouchableOpacity >
-        <MedicationCartItem medicine={item}/>
-        </TouchableOpacity>
-
-      )}
-    
-    />:<EmptyState/>}
+{medList?.length > 0 ? 
+  <FlatList
+    data={medList}
+    onRefresh={() => GetDateRangeList(selectDate)}
+    refreshing={loading}
+    renderItem={({ item }) => (
+      <TouchableOpacity onPress={()=>router.push({
+        pathname:'/action-modal',
+        params:{
+          ...item,
+          selectDate:selectDate
+        }
+      })}>
+        <MedicationCardItem medicine={item} />
+      </TouchableOpacity>
+    )}
+  />
+ :<EmptyState />
+  }
 
 
   </View>
